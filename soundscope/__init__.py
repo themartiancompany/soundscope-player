@@ -35,7 +35,7 @@ from gi.repository import Gtk
 import glob
 from os import getcwd, listdir, makedirs, umask
 from os.path import abspath, basename, exists, dirname, isdir, realpath
-from os.path import join as path_join
+from os.path import join as _path_join
 from pathlib import Path
 from shutil import which
 import subprocess
@@ -85,7 +85,7 @@ def check_requirements():
         (f"This program needs '{p}' to work."
          "Please install it."))
     ds_dirs = (
-      path_join(
+      _path_join(
         user_data_dir(
           "duckstation",
           "Connor McLaughlin"),
@@ -100,7 +100,7 @@ def check_requirements():
 def set_dirs(
       tmp_dir=dirs['cache']):
   _original_umask = umask(0)
-  path = path_join(
+  path = _path_join(
            tmp_dir,
            "convert")
   for d in dirs:
@@ -138,7 +138,7 @@ def fiximg(
 
 def play(
       *media_src):
-  ds_settings = path_join(
+  ds_settings = _path_join(
                   dirname(
                     realpath(
                       __file__)),
@@ -148,8 +148,10 @@ def play(
     *media_src,
     out_dir=dirs['cache'],
     image_name="playback")
-    cue = path_join(dirs['cache'],
-    "playback.cue")
+    cue = _path_join(
+            dirs[
+              'cache'],
+            "playback.cue")
   fiximg(
     cue)
   ds_cmd = [
