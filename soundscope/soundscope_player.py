@@ -152,20 +152,20 @@ def play(
     *media_src,
     out_dir=dirs['cache'],
     image_name="playback")
-    cue = _path_join(
-            dirs[
-              'cache'],
-            "playback.cue")
+  _cue = _path_join(
+          dirs[
+            'cache'],
+          "playback.cue")
   _fiximg(
-    cue)
-  ds_cmd = [
+    _cue)
+  _ds_cmd = [
     "duckstation-nogui",
     "-settings",
       ds_settings,
-    cue
+    _cue
   ]
   _sh(
-    ds_cmd)
+    _ds_cmd)
   _clean_cache()
 
 def on_activate(
