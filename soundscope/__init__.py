@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
 """SoundScope PlayStation media player."""
 
+#
 #    soundscope-player
 #
 #    ----------------------------------------------------------------------
-#    Copyright © 2022  Pellegrino Prevete
+#    Copyright © 2022, 2023, 2024, 2025  Pellegrino Prevete
 #
 #    All rights reserved
 #    ----------------------------------------------------------------------
 #
 #    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
+#    it under the terms of the GNU Affero General Public License as published
+#    by the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
 #
 #    This program is distributed in the hope that it will be useful,
@@ -40,115 +41,207 @@ from shutil import which
 import subprocess
 from subprocess import run as sh
 
-app_details = ("soundscope-player", "Pellegrino Prevete")
-dirs = {'data': user_data_dir(*app_details),
-        'config': user_config_dir(*app_details),
-        'cache': user_cache_dir(*app_details)}
+app_details = (
+  "soundscope-player",
+  "Pellegrino Prevete"
+  )
+dirs = {
+  'data':
+    user_data_dir(*app_details),
+  'config':
+    user_config_dir(*app_details),
+  'cache':
+    user_cache_dir(*app_details)
+}
 
-def err(msg):
-    print_err(msg)
-    exit()
+def err(
+      _msg):
+  print_err(
+    _msg)
+  exit()
 
-def zenity_err(msg):
-    zenity_cmd = ["zenity", "--icon=input-gaming", f"--error={msg}"]
-    sh(zenity_cmd)
+def zenity_err(
+      msg):
+  _zenity_cmd = [
+    "zenity",
+    "--icon=input-gaming",
+    f"--error={msg}"
+  ]
+  sh(
+    _zenity_cmd)
 
 def check_requirements():
-    if which("zenity"):
-        print_err = zenity_err
-    else:
-        print_err = print
-    programs = ['duckstation-nogui']
-    for p in programs:
-        if not which(p):
-            err(f"This program needs '{p}' to work. Please install it.")
+  if which(
+       "zenity"):
+    print_err = zenity_err
+  else:
+    print_err = print
+  programs = [
+    'duckstation-nogui'
+  ]
+  for p in programs:
+    if not which(p):
+      err(
+        (f"This program needs '{p}' to work."
+         "Please install it."))
+    ds_dirs = (
+      path_join(
+        user_data_dir(
+          "duckstation",
+          "Connor McLaughlin"),
+        "bios"),
+        "/usr/share/psx/bios"
+    )
+    if not any("ps-20e.bin" in listdir(d) for d in ds_dirs):
+      err(
+        ("No SoundScope-enabled PlayStation bios found."
+         "Install `psx-bios` from AUR."))
 
-    ds_dirs = (path_join(user_data_dir("duckstation", "Connor McLaughlin"),
-                                       "bios"),
-               "/usr/share/psx")
-    if not any("ps-41e.bin" in listdir(d) for d in ds_dirs):
-        err("No SoundScope-enabled PlayStation bios found. Install `psx-bios` from AUR.")
-
-
-def set_dirs(tmp_dir=dirs['cache']):
-    original_umask = umask(0)
-    path = path_join(tmp_dir, "convert")
-    for d in dirs:
-        try:
-            makedirs(dirs[d], 0o700, exist_ok=True)
-        except OSError:
-            pass
-    umask(original_umask)
+def set_dirs(
+      tmp_dir=dirs['cache']):
+  _original_umask = umask(0)
+  path = path_join(
+           tmp_dir,
+           "convert")
+  for d in dirs:
+    try:
+      makedirs(
+        dirs[
+          d],
+        0o700,
+        exist_ok=True)
+    except OSError:
+      pass
+  umask(
+    _original_umask)
 
 def clean_cache():
-    files = glob.glob(f"{dirs['cache']}/*")
-    for f in files:
-        print(f)
+  files = glob.glob(
+            f"{dirs['cache']}/*")
+  for _file in files:
+    print(
+      _file)
 
-def fiximg(cue):
-    with open(cue, "r") as handle:
-        text = handle.read()
-    with open(cue, "w") as handle:
-        handle.write(text.replace("WAVE", "BINARY"))
+def fiximg(
+      cue):
+  with open(
+         cue,
+         "r") as handle:
+    text = handle.read()
+  with open(
+         cue,
+         "w") as handle:
+    handle.write(
+      text.replace(
+        "WAVE",
+        "BINARY"))
 
-def play(*media_src):
-    ds_settings = path_join(dirname(realpath(__file__)), "settings.ini")
-    set_dirs()
-    mkimg(*media_src,
-          out_dir=dirs['cache'],
-          image_name="playback")
-    cue = path_join(dirs['cache'], "playback.cue")
-    fiximg(cue)
-    ds_cmd = ["duckstation-nogui", "-settings", ds_settings, cue]
-    sh(ds_cmd)
-    clean_cache()
+def play(
+      *media_src):
+  ds_settings = path_join(
+                  dirname(
+                    realpath(
+                      __file__)),
+                  "settings.ini")
+  set_dirs()
+  mkimg(
+    *media_src,
+    out_dir=dirs['cache'],
+    image_name="playback")
+    cue = path_join(dirs['cache'],
+    "playback.cue")
+  fiximg(
+    cue)
+  ds_cmd = [
+    "duckstation-nogui",
+    "-settings",
+      ds_settings,
+    cue
+  ]
+  sh(
+    ds_cmd)
+  clean_cache()
 
-def on_activate(app, media_prompt):
-    response = media_prompt.run()
-    if response  == Gtk.ResponseType.OK:
-        app.filenames = media_prompt.get_filenames()
-        print(f"File(s) selected: {app.filenames}")
-    elif response == Gtk.ResponseType.CANCEL:
-        print("Canceled")
+def on_activate(
+      app,
+      media_prompt):
+  response = media_prompt.run()
+  if response  == Gtk.ResponseType.OK:
+    app.filenames = media_prompt.get_filenames()
+    print(
+      f"File(s) selected: '{app.filenames}'.")
+  elif response == Gtk.ResponseType.CANCEL:
+    print(
+      "Canceled.")
     media_prompt.hide()
-    return True
+  return True
 
 def select_media():
-    app = Gtk.Application(application_id="com.sony.SoundScopePlayer")
-    win = Gtk.ApplicationWindow(application=app)
-    dialog_kwargs = {"title": "Select media",
-                     "parent": win,
-                     "action": Gtk.FileChooserAction.OPEN}
-    dialog_buttons = (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-                      Gtk.STOCK_OPEN, Gtk.ResponseType.OK)
-    media_prompt = Gtk.FileChooserDialog(**dialog_kwargs)
-    media_prompt.add_buttons(*dialog_buttons)
-    media_prompt.set_select_multiple(True)
-    app.connect("activate", on_activate, media_prompt)
-    app.run(None)
-    return app.filenames
+  app = Gtk.Application(
+          application_id="com.sony.SoundScopePlayer")
+  win = Gtk.ApplicationWindow(
+          application=app)
+  dialog_kwargs = {
+    "title":
+      "Select media",
+    "parent":
+      win,
+    "action":
+      Gtk.FileChooserAction.OPEN
+  }
+  dialog_buttons = (
+    Gtk.STOCK_CANCEL,
+    Gtk.ResponseType.CANCEL,
+    Gtk.STOCK_OPEN,
+    Gtk.ResponseType.OK
+  )
+  media_prompt = Gtk.FileChooserDialog(
+                   **dialog_kwargs)
+  media_prompt.add_buttons(
+    *dialog_buttons)
+  media_prompt.set_select_multiple(
+    True)
+  app.connect(
+    "activate",
+    on_activate,
+    media_prompt)
+  app.run(
+    None)
+  return app.filenames
 
 def main():
-    check_requirements()
-    parser_args = {"description": "PlayStation SoundScope player"}
-    parser = ArgumentParser(**parser_args)
-
-    media_source = {'args': ['media_source'],
-                    'kwargs': {'nargs': '*',
-                               'action': 'store',
-                               'help': ("media source; "
-                                        "default: current directory")}}
-
-    parser.add_argument(*media_source['args'],
-                        **media_source['kwargs'])
-
-    args = parser.parse_args()
-
-    if not args.media_source:
-        media_source = select_media()
-    else:
-        media_source = args.media_source
-    play(*media_source)
+  check_requirements()
+  parser_args = {
+    "description":
+      "PlayStation SoundScope player"
+  }
+  parser = ArgumentParser(
+             **parser_args)
+  media_source = {
+    'args':
+      ['media_source'],
+    'kwargs': {
+      'nargs':
+        '*',
+      'action':
+        'store',
+      'help':
+        ("media source; "
+         "default: current directory")
+    }
+  }
+  parser.add_argument(
+    *media_source[
+      'args'],
+    **media_source[
+      'kwargs'])
+  args = parser.parse_args()
+  if not args.media_source:
+    media_source = select_media()
+  else:
+    media_source = args.media_source
+  play(
+    *media_source)
 
 if __name__ == "__main__":
-    main()
+  main()
