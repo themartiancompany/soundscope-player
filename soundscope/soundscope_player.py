@@ -117,7 +117,6 @@ def _zenity_err(
     _zenity_cmd)
 
 def _requirements_check():
-  _requirements_os()
   if which(
        "zenity"):
     _print_err = _zenity_err
