@@ -227,11 +227,15 @@ def play(
     "_out_dir":
       dirs['cache'],
     "_image_name":
-      "playback"
+      "playback",
+    "_verbose":
+      _verbose
   }
   if _verbose:
+    _playlist = " ".join(
+                  _media_src)
     _msg_info(
-      f"Playing '{*_media_src}'")
+      f"Playing '{_playlist}'")
   _mkimg(
     *_media_src,
     **_mkimg_kwargs)
