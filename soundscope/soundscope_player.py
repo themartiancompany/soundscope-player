@@ -197,32 +197,31 @@ def _fiximg(
 def _retroarch_launch(
       _bin,
       _verbose=False):
-  _activity = "'com.retroarch/.browser.retroactivity.RetroActivityFuture'"
-  _cores_path = "/data/user/0/com.retroarch/cores"
-  _core_name = "pcsx_rearmed"
-  _core = _path_join(
-            _cores_path,
-            f"{_core_name}_libretro_android.so")
-  _retroarch_cmd = [
-    "am",
-      "start",
-        "-a",
-          "'android.intent.action.MAIN'",
-        "-n",
-          _activity,
-        "-e",
-          'ROM',
-          f"'{_bin}'",
-        "-e",
-          'LIBRETRO',
-          f"'{_core}'"
-  ]
-  _retroarch_cmd_string = " ".join(
-                                _retroarch_cmd)
+  # _activity = "'com.retroarch/.browser.retroactivity.RetroActivityFuture'"
+  # _cores_path = "/data/user/0/com.retroarch/cores"
+  # _core_name = "pcsx_rearmed"
+  # _core = _path_join(
+  #           _cores_path,
+  #           f"{_core_name}_libretro_android.so")
+  # _retroarch_cmd = [
+  #   "am",
+  #     "start",
+  #       "-a",
+  #         "'android.intent.action.MAIN'",
+  #       "-n",
+  #         _activity,
+  #       "-e",
+  #         'ROM',
+  #         f"'{_bin}'",
+  #       "-e",
+  #         'LIBRETRO',
+  #         f"'{_core}'"
+  # ]
+  # _retroarch_cmd_string = " ".join(
+  #                               _retroarch_cmd)
   _cmd = [
-    "su",
-      "-c",
-        _retroarch_cmd_string
+    "soundscope-player-retroarch",
+      _bin
   ]
   if _verbose:
     _msg_info(

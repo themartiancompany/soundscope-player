@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+
+#    ----------------------------------------------------------------------
+#    Copyright © 2025  Pellegrino Prevete
+#
+#    All rights reserved
+#    ----------------------------------------------------------------------
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Affero General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU Affero General Public License for more details.
+#
+#    You should have received a copy of the GNU Affero General Public License
+#    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+_soundscope_player_retroarch() {
+  local \
+    _image="${1}" \
+    _hud="${2}" \
+    _core_name \
+    _os \
+    _game_path \
+    _cores_path \
+    _platform_core_path \
+    _cmd=()
+  _os="$( \
+    uname \
+      -o)"
+  _msg_info \
+    "Running '${_image}'."
+  _cores_path="/data/user/0/com.retroarch/cores"
+  _core_name="pcsx_rearmed"
+  _platform_core_path="${_cores_path}/${_core_name}_libretro_android.so"
+  _cmd=(
+    am
+      start \
+        -a
+          'android.intent.action.MAIN'
+        -n
+          'com.retroarch/.browser.retroactivity.RetroActivityFuture'
+        -e
+          'ROM'
+          "${_image}"
+        -e
+          'LIBRETRO'
+          "${_platform_core_path}"  
+  )
+  if [[ "${_hud}" == "y" ]]; then
+  _cmd+=(
+    -e
+      'CONFIGFILE'
+      '/storage/emulated/0/Android/data/com.retroarch/files/retroarch.cfg'
+  )
+  fi
+  su \
+    -c \
+      "${_cmd[*]}"
+}
+
+_soundscope_player_retroarch \
+  "${_image}" \
+  "y"
