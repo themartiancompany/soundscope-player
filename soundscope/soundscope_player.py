@@ -77,13 +77,12 @@ dirs = {
     _cache_dir_get()
 }
 
-def _requirements_os():
-  if not (_is_android()):
-    from gi import require_version
-    require_version(
-      "Gtk",
-      '3.0')
-    from gi.repository import Gtk
+if not (_is_android()):
+  from gi import require_version
+  require_version(
+    "Gtk",
+    '3.0')
+  from gi.repository import Gtk
 
 def _msg_print(
       _type,
