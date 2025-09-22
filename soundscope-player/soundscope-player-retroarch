@@ -32,8 +32,8 @@ _soundscope_player_retroarch() {
   _os="$( \
     uname \
       -o)"
-  _msg_info \
-    "Running '${_image}'."
+  echo \
+    "[soundscope-player-retroarch] INFO: Playing '${_image}'."
   _cores_path="/data/user/0/com.retroarch/cores"
   _core_name="pcsx_rearmed"
   _platform_core_path="${_cores_path}/${_core_name}_libretro_android.so"
@@ -59,7 +59,7 @@ _soundscope_player_retroarch() {
   )
   fi
   echo \
-    "Running '${_cmd[*]}'"
+    "[soundscope-player-retroarch] INFO: Running '${_cmd[*]}'"
   su \
     -c \
       "${_cmd[*]}"
