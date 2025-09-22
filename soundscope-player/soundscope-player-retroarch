@@ -58,10 +58,18 @@ _soundscope_player_retroarch() {
       '/storage/emulated/0/Android/data/com.retroarch/files/retroarch.cfg'
   )
   fi
+  echo \
+    "Running '${_cmd[*]}'"
   su \
     -c \
       "${_cmd[*]}"
 }
+
+if (( "$#" < 1 )); then
+  echo \
+    "[soundscope-player-retroarch] ERROR: No image given."
+fi
+_image="${1}"
 
 _soundscope_player_retroarch \
   "${_image}" \

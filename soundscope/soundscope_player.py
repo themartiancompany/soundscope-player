@@ -276,7 +276,7 @@ def play(
               'cache'],
             "playback.bin")
     _retroarch_launch(
-      _bin,
+      _cue,
       _verbose)
   _clean_cache()
 
