@@ -45,17 +45,6 @@ app_details = (
   "soundscope-player",
   "Pellegrino Prevete"
 )
-dirs = {
-  'data':
-    user_data_dir(
-      *app_details),
-  'config':
-    user_config_dir(
-      *app_details),
-  'cache':
-    user_cache_dir(
-      *app_details)
-}
 
 def _is_android():
   if hasattr(
@@ -64,6 +53,28 @@ def _is_android():
     return True
   else:
     return False
+
+def _cache_dir_get():
+  if _is_android():
+    _android_dir = "/storage/emulated/0/Android"
+    _cache_dir = _path_join(
+                   f"{_android_dir}",
+                   "soundscope-player")
+  else:
+    _cache_dir = user_cache_dir(
+                   *app_details)
+  return _cache_dir
+
+dirs = {
+  'data':
+    user_data_dir(
+      *app_details),
+  'config':
+    user_config_dir(
+      *app_details),
+  'cache':
+    _cache_dir_get()
+}
 
 def _requirements_os():
   if not (_is_android()):
@@ -183,7 +194,8 @@ def _fiximg(
         "BINARY"))
 
 def _retroarch_launch(
-      _cue):
+      _cue,
+      _verbose=False):
   _activity = "'com.retroarch/.browser.retroactivity.RetroActivityFuture'"
   _cores_path = "/data/user/0/com.retroarch/cores"
   _core_name = "pcsx_rearmed"
@@ -211,6 +223,9 @@ def _retroarch_launch(
       "-c",
         _retroarch_cmd_string
   ]
+  if _verbose:
+    _msg_info(
+      f"Running '{_cmd}'.")
   _sh(
     _cmd)
 
@@ -257,7 +272,8 @@ def play(
       _cmd)
   else:
     _retroarch_launch(
-      _cue)
+      _cue,
+      _verbose)
   _clean_cache()
 
 def on_activate(
