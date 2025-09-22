@@ -205,7 +205,7 @@ def _retroarch_launch(
           _core
   ]
   _retroarch_cmd_string = " ".join(
-                                _cmd)
+                                _retroarch_cmd)
   _cmd = [
     "su",
       "-c",
@@ -235,7 +235,7 @@ def play(
     _playlist = " ".join(
                   _media_src)
     _msg_info(
-      f"Playing '{_playlist}'")
+      f"Playing '{_playlist}'.")
   _mkimg(
     *_media_src,
     **_mkimg_kwargs)
