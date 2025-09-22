@@ -68,11 +68,11 @@ def encode_icon(
                 Path(
                   icon).parents[
                     0])
-    return encode(
-             in_hicolor_src(
-               icon),
-             in_hicolor(
-               icon_path))
+  return encode(
+           in_hicolor_src(
+             icon),
+           in_hicolor(
+             icon_path))
 add_icon = lambda icon: data_files.append(
                           encode_icon(
                             icon))
