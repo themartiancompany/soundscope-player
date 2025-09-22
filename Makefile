@@ -45,12 +45,23 @@ INSTALL_DOC_TARGETS=\
   install-doc \
   install-man
 _INSTALL_TARGETS=\
+  install-program \
   $(_INSTALL_DOC_TARGETS)
 _INSTALL_TARGETS_ALL=\
   install \
   $(_INSTALL_TARGETS)
 _PHONY_TARGETS=\
   $(_INSTALL_TARGETS_ALL)
+
+install: $(_INSTALL_TARGETS)
+
+install-program:
+
+	python \
+	  "setup.py" \
+	    install \
+	    --root="$(DESTDIR)" \
+	    --optimize=1
 
 install-doc:
 
