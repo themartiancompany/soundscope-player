@@ -289,7 +289,7 @@ def on_activate(
   elif response == Gtk.ResponseType.CANCEL:
     print(
       "Canceled.")
-    media_prompt.hide()
+  media_prompt.hide()
   return True
 
 def _select_media():
