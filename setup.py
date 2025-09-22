@@ -115,7 +115,7 @@ _setup_kwargs = {
     data_files,
   "entry_points": {
     'console_scripts': [
-      'soundscope-player = soundscope:main']
+      'soundscope-player = soundscope:_main']
   },
   "install_requires": [
     'appdirs',

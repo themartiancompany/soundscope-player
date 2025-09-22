@@ -28,7 +28,7 @@ from appdirs import *
 from argparse import ArgumentParser
 from copy import deepcopy as cp
 import os
-from mkaudiocdrimg import _mkimg as _mkimg
+from mkaudiocdrimg.mkaudiocdrimg import _mkimg as _mkimg
 from platform import system as _system
 import glob
 from os import getcwd, listdir, makedirs, umask
@@ -73,10 +73,23 @@ def _requirements_os():
       '3.0')
     from gi.repository import Gtk
 
-def _msg_err(
+def _msg_print(
+      _type,
+      _msg):
+  print(
+    f"[soundscope-player]: {_type}: {_msg}")
+
+def _msg_info(
+      _msg):
+  _msg_print(
+    "INFO",
+    _msg)
+
+def _msg_error(
       _msg,
       _exit):
-  _print_err(
+  _msg_print(
+    "ERROR",
     _msg)
   exit(
     _exit)
@@ -103,7 +116,7 @@ def _requirements_check():
   ]
   for p in programs:
     if not which(p):
-      _msg_err(
+      _msg_error(
         (f"This program needs '{p}' to work."
          "Please install it."),
         0)
@@ -116,7 +129,7 @@ def _requirements_check():
         "/usr/share/psx/bios"
     )
     if not any("ps-20e.bin" in listdir(d) for d in ds_dirs):
-      _msg_err(
+      _msg_error(
         ("No SoundScope-enabled PlayStation bios found."
          "Install `psx-bios` from the Ur."),
         1)
@@ -308,6 +321,6 @@ def _main():
     play(
       *_media_source)
   else:
-    _msg_err(
+    _msg_error(
       "To be implemented.",
       1)
