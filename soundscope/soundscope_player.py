@@ -195,7 +195,7 @@ def _fiximg(
         "BINARY"))
 
 def _retroarch_launch(
-      _cue,
+      _bin,
       _verbose=False):
   _activity = "'com.retroarch/.browser.retroactivity.RetroActivityFuture'"
   _cores_path = "/data/user/0/com.retroarch/cores"
@@ -212,7 +212,7 @@ def _retroarch_launch(
           _activity,
         "-e",
           'ROM',
-          f"'{_cue}'",
+          f"'{_bin}'",
         "-e",
           'LIBRETRO',
           f"'{_core}'"
