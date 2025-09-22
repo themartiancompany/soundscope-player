@@ -28,7 +28,7 @@ from appdirs import *
 from argparse import ArgumentParser
 from copy import deepcopy as cp
 import os
-from mkaudiocdrimg import mkimg as _mkimg
+from mkaudiocdrimg import _mkimg as _mkimg
 from platform import system as _system
 import glob
 from os import getcwd, listdir, makedirs, umask
