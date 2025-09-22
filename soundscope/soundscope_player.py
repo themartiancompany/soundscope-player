@@ -29,9 +29,7 @@ from argparse import ArgumentParser
 from copy import deepcopy as cp
 import os
 from mkaudiocdrimg import mkimg as _mkimg
-from gi import require_version
-require_version("Gtk", '3.0')
-from gi.repository import Gtk
+from platform import system as _system
 import glob
 from os import getcwd, listdir, makedirs, umask
 from os.path import abspath, basename, exists, dirname, isdir, realpath
@@ -40,6 +38,7 @@ from pathlib import Path
 from shutil import which
 import subprocess
 from subprocess import run as _sh
+import sys
 
 _app_id = "com.sony.SoundScopePlayer"
 app_details = (
@@ -58,11 +57,29 @@ dirs = {
       *app_details)
 }
 
+def _is_android():
+  if hasattr(
+       sys,
+       'getandroidapilevel'):
+    return True
+  else:
+    return False
+
+def _requirements_os():
+  if not (_is_android()):
+    from gi import require_version
+    require_version(
+      "Gtk",
+      '3.0')
+    from gi.repository import Gtk
+
 def _msg_err(
-      _msg):
+      _msg,
+      _exit):
   _print_err(
     _msg)
-  exit()
+  exit(
+    _exit)
 
 def _zenity_err(
       msg):
@@ -74,7 +91,8 @@ def _zenity_err(
   _sh(
     _zenity_cmd)
 
-def check_requirements():
+def _requirements_check():
+  _requirements_os()
   if which(
        "zenity"):
     _print_err = _zenity_err
@@ -87,7 +105,8 @@ def check_requirements():
     if not which(p):
       _msg_err(
         (f"This program needs '{p}' to work."
-         "Please install it."))
+         "Please install it."),
+        0)
     ds_dirs = (
       _path_join(
         user_data_dir(
@@ -99,7 +118,8 @@ def check_requirements():
     if not any("ps-20e.bin" in listdir(d) for d in ds_dirs):
       _msg_err(
         ("No SoundScope-enabled PlayStation bios found."
-         "Install `psx-bios` from AUR."))
+         "Install `psx-bios` from the Ur."),
+        1)
 
 def set_dirs(
       tmp_dir=dirs['cache']):
@@ -140,6 +160,9 @@ def _fiximg(
         "WAVE",
         "BINARY"))
 
+def _retroarch_launch():
+  pass
+
 def play(
       *media_src):
   ds_settings = _path_join(
@@ -164,8 +187,13 @@ def play(
       ds_settings,
     _cue
   ]
-  _sh(
-    _ds_cmd)
+  if ( not _is_android()):
+    _cmd = _ds_cmd
+    _sh(
+      _cmd)
+  else:
+    _retroarch_launch(
+      _cue)
   _clean_cache()
 
 def on_activate(
@@ -216,14 +244,14 @@ def _select_media():
   return _app.filenames
 
 def _main():
-  check_requirements()
-  parser_args = {
+  _requirements_check()
+  _parser_args = {
     "description":
       "PlayStation SoundScope player"
   }
-  parser = ArgumentParser(
-             **parser_args)
-  media_source = {
+  _parser = ArgumentParser(
+             **_parser_args)
+  _media_source = {
     'args':
       ['media_source'],
     'kwargs': {
@@ -236,15 +264,21 @@ def _main():
          "default: current directory")
     }
   }
-  parser.add_argument(
-    *media_source[
+  _parser.add_argument(
+    *_media_source[
       'args'],
-    **media_source[
+    **_media_source[
       'kwargs'])
-  args = parser.parse_args()
-  if not args.media_source:
-    media_source = _select_media()
+  _args = _parser.parse_args()
+  if not _args.media_source:
+    if (not _is_android()):
+    _media_source = _select_media()
   else:
-    media_source = args.media_source
-  play(
-    *media_source)
+    _media_source = _args._media_source
+  if (not _is_android()):
+    play(
+      *_media_source)
+  else:
+    _msg_err(
+      "To be implemented.",
+      1)
