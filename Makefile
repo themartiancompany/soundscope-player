@@ -21,6 +21,7 @@
 
 PREFIX ?= /usr/local
 _PROJECT=soundscope-player
+BIN_DIR=$(DESTDIR)$(PREFIX)/bin
 DOC_DIR=$(DESTDIR)$(PREFIX)/share/doc/$(_PROJECT)
 MAN_DIR?=$(DESTDIR)$(PREFIX)/share/man
 
@@ -46,6 +47,7 @@ _INSTALL_DOC_TARGETS=\
   install-man
 _INSTALL_TARGETS=\
   install-program \
+  install-android \
   $(_INSTALL_DOC_TARGETS)
 _INSTALL_TARGETS_ALL=\
   install \
@@ -62,6 +64,13 @@ install-program:
 	    install \
 	    --root="$(DESTDIR)" \
 	    --optimize=1
+
+install-android:
+
+	install \
+	  -vDm755 \
+	  "$(_PROJECT)/$(_PROJECT)-retroarch" \
+	  "$(BIN_DIR)/$(_PROJECT)-retroarch"
 
 install-doc:
 
