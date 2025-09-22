@@ -324,12 +324,11 @@ def _main():
   if not _args.media_source:
     if (not _is_android()):
       _media_source = _select_media()
+    else:
+      _msg_error(
+        "To be implemented.",
+        1)
   else:
-    _media_source = _args._media_source
-  if (not _is_android()):
-    play(
-      *_media_source)
-  else:
-    _msg_error(
-      "To be implemented.",
-      1)
+    _media_source = _args.media_source
+  play(
+    *_media_source)
