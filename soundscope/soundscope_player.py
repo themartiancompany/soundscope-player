@@ -59,7 +59,8 @@ def _cache_dir_get():
     _android_dir = "/storage/emulated/0/Android"
     _cache_dir = _path_join(
                    f"{_android_dir}",
-                   "soundscope-player")
+                   "media",
+                   _app_id)
   else:
     _cache_dir = user_cache_dir(
                    *app_details)
@@ -211,10 +212,10 @@ def _retroarch_launch(
           _activity,
         "-e",
           'ROM',
-          _cue,
+          f"'{_cue}'",
         "-e",
           'LIBRETRO',
-          _core
+          f"'{_core}'"
   ]
   _retroarch_cmd_string = " ".join(
                                 _retroarch_cmd)
