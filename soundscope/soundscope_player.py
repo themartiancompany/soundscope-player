@@ -177,9 +177,9 @@ def _retroarch_launch(
           _activity,
         "-e",
           'ROM'
-          _cue
-        -e
-          'LIBRETRO'
+          _cue,
+        "-e",
+          'LIBRETRO',
           _core
   ]
   _retroarch_cmd_string = " ".join(
