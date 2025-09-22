@@ -184,7 +184,7 @@ def _fiximg(
 
 def _retroarch_launch(
       _cue):
-  _activity = 'com.retroarch/.browser.retroactivity.RetroActivityFuture'
+  _activity = "'com.retroarch/.browser.retroactivity.RetroActivityFuture'"
   _cores_path = "/data/user/0/com.retroarch/cores"
   _core_name = "pcsx_rearmed"
   _core = _path_join(
@@ -194,7 +194,7 @@ def _retroarch_launch(
     "am",
       "start",
         "-a",
-          "android.intent.action.MAIN",
+          "'android.intent.action.MAIN'",
         "-n",
           _activity,
         "-e",
