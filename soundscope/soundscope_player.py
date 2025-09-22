@@ -176,7 +176,7 @@ def _retroarch_launch(
         "-n",
           _activity,
         "-e",
-          'ROM'
+          'ROM',
           _cue,
         "-e",
           'LIBRETRO',
@@ -301,7 +301,7 @@ def _main():
   _args = _parser.parse_args()
   if not _args.media_source:
     if (not _is_android()):
-    _media_source = _select_media()
+      _media_source = _select_media()
   else:
     _media_source = _args._media_source
   if (not _is_android()):
