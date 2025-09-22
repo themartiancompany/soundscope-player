@@ -149,10 +149,10 @@ def _requirements_check():
          _dir):
       _ds_dirs_existing.append(
         _dir)
-  if not any("ps-20e.bin" in listdir(d) for d in _ds_dirs_existing):
+  if not any("ps-41e.bin" in listdir(d) for d in _ds_dirs_existing):
     _msg_error(
-      ("No SoundScope-enabled PlayStation bios found."
-       "Install `psx-bios` from the Ur."),
+      ("No SoundScope-enabled PlayStation bios found. "
+       "Install `psx-soundscope-bios` from the Ur."),
       1)
 
 def set_dirs(
