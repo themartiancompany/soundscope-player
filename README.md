@@ -15,27 +15,37 @@ PlayStation's SoundScope player for personal computers.
 
 ## Install
 
-The program can be installed directly
-using the code in this repository by running:
+The program in this source repo
+can be installed from source using GNU Make.
 
 ```bash
-python \
-  "setup.py" \
-    install
+make \
+  install
 ```
 
-Documentation can be installed using
-GNU make by running
+Documentation can be installed separately
+with
 
 ```bash
 make \
   install-doc
 ```
 
-Manual instead with
+while manual instead with
 ```bash
 make \
   install-man
+```
+
+### Documentation
+
+Manual entry for `soundscope-player` can be consulted
+using the `man` utility and it is
+automatically installed with the program.
+
+```bash
+man \
+  soundscope-player
 ```
 
 The program has officially published on the
