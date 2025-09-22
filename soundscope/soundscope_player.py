@@ -272,8 +272,12 @@ def play(
     _sh(
       _cmd)
   else:
+    _bin = _path_join(
+            dirs[
+              'cache'],
+            "playback.bin")
     _retroarch_launch(
-      _cue,
+      _bin,
       _verbose)
   _clean_cache()
 
