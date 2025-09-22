@@ -215,7 +215,8 @@ def _retroarch_launch(
     _cmd)
 
 def play(
-      *_media_src):
+      *_media_src,
+      _verbose=False):
   _ds_settings = _path_join(
                    dirname(
                      realpath(
@@ -228,6 +229,9 @@ def play(
     "_image_name":
       "playback"
   }
+  if _verbose:
+    _msg_info(
+      f"Playing '{*_media_src}'")
   _mkimg(
     *_media_src,
     **_mkimg_kwargs)
@@ -356,4 +360,5 @@ def _main():
   else:
     _media_source = _args.media_source
   play(
-    *_media_source)
+    *_media_source,
+    _verbose=_args.verbose)
