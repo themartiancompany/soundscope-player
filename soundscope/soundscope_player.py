@@ -91,8 +91,9 @@ def _msg_error(
   _msg_print(
     "ERROR",
     _msg)
-  exit(
-    _exit)
+  if (_exit != 0):
+    exit(
+      _exit)
 
 def _zenity_err(
       msg):
@@ -111,28 +112,36 @@ def _requirements_check():
     _print_err = _zenity_err
   else:
     _print_err = print
-  programs = [
+  _programs_gnu = [
     'duckstation-nogui'
   ]
-  for p in programs:
-    if not which(p):
-      _msg_error(
-        (f"This program needs '{p}' to work."
-         "Please install it."),
-        0)
-    ds_dirs = (
-      _path_join(
-        user_data_dir(
-          "duckstation",
-          "Connor McLaughlin"),
-        "bios"),
-        "/usr/share/psx/bios"
-    )
-    if not any("ps-20e.bin" in listdir(d) for d in ds_dirs):
-      _msg_error(
-        ("No SoundScope-enabled PlayStation bios found."
-         "Install `psx-bios` from the Ur."),
-        1)
+  if not _is_android():
+    for p in _programs_gnu:
+      if not which(p):
+        _msg_error(
+          (f"This program needs '{p}' to work. "
+           "Please install it."),
+          0)
+  _ds_dirs = (
+    _path_join(
+      user_data_dir(
+        "duckstation",
+        "Connor McLaughlin"),
+      "bios"),
+      "/usr/share/psx/bios",
+      "/data/data/com.termux/files/usr/share/psx/bios"
+  )
+  _ds_dirs_existing = []
+  for _dir in _ds_dirs:
+    if exists(
+         _dir):
+      _ds_dirs_existing.append(
+        _dir)
+  if not any("ps-20e.bin" in listdir(d) for d in _ds_dirs_existing):
+    _msg_error(
+      ("No SoundScope-enabled PlayStation bios found."
+       "Install `psx-bios` from the Ur."),
+      1)
 
 def set_dirs(
       tmp_dir=dirs['cache']):

@@ -41,7 +41,7 @@ DOC_FILES=\
 _PYTHON_FILES=\
   soundscope-player
 
-INSTALL_DOC_TARGETS=\
+_INSTALL_DOC_TARGETS=\
   install-doc \
   install-man
 _INSTALL_TARGETS=\
