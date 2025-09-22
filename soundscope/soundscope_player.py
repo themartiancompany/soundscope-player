@@ -160,8 +160,37 @@ def _fiximg(
         "WAVE",
         "BINARY"))
 
-def _retroarch_launch():
-  pass
+def _retroarch_launch(
+      _cue):
+  _activity = 'com.retroarch/.browser.retroactivity.RetroActivityFuture'
+  _cores_path = "/data/user/0/com.retroarch/cores"
+  _core_name = "pcsx_rearmed"
+  _core = _path_join(
+            _cores_path,
+            f"{_core_name}_libretro_android.so")
+  _retroarch_cmd = [
+    "am",
+      "start",
+        "-a",
+          "android.intent.action.MAIN",
+        "-n",
+          _activity,
+        "-e",
+          'ROM'
+          _cue
+        -e
+          'LIBRETRO'
+          _core
+  ]
+  _retroarch_cmd_string = " ".join(
+                                _cmd)
+  _cmd = [
+    "su",
+      "-c",
+        _retroarch_cmd_string
+  ]
+  _sh(
+    _cmd)
 
 def play(
       *media_src):
