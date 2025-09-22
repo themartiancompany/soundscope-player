@@ -215,30 +215,35 @@ def _retroarch_launch(
     _cmd)
 
 def play(
-      *media_src):
-  ds_settings = _path_join(
-                  dirname(
-                    realpath(
-                      __file__)),
-                  "settings.ini")
+      *_media_src):
+  _ds_settings = _path_join(
+                   dirname(
+                     realpath(
+                       __file__)),
+                   "settings.ini")
   set_dirs()
+  _mkimg_kwargs = {
+    "_out_dir":
+      dirs['cache'],
+    "_image_name":
+      "playback"
+  }
   _mkimg(
-    *media_src,
-    out_dir=dirs['cache'],
-    image_name="playback")
+    *_media_src,
+    **_mkimg_kwargs)
   _cue = _path_join(
           dirs[
             'cache'],
           "playback.cue")
   _fiximg(
     _cue)
-  _ds_cmd = [
-    "duckstation-nogui",
-    "-settings",
-      ds_settings,
-    _cue
-  ]
   if ( not _is_android()):
+    _ds_cmd = [
+      "duckstation-nogui",
+      "-settings",
+        _ds_settings,
+      _cue
+    ]
     _cmd = _ds_cmd
     _sh(
       _cmd)
@@ -315,10 +320,30 @@ def _main():
          "default: current directory")
     }
   }
+  _verbose = {
+    'args': [
+      '--verbose'],
+    'kwargs': {
+      'dest':
+        'verbose',
+      'action':
+        'store_true',
+      'default':
+        False,
+      'help':
+        ("verbose output; "
+         "default: False")
+    }
+  }
   _parser.add_argument(
     *_media_source[
       'args'],
     **_media_source[
+      'kwargs'])
+  _parser.add_argument(
+    *_verbose[
+      'args'],
+    **_verbose[
       'kwargs'])
   _args = _parser.parse_args()
   if not _args.media_source:
